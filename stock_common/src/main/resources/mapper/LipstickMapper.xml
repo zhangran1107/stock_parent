@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.stock.mapper.LipstickMapper">
+
+
+
+
+    <select id="getlipstickPage" resultType="com.itheima.stock.pojo.domain.LipstickDomain">
+        seLect
+        lipstick.name,
+        lipstick.price,
+        lipstick.color,
+        lipstick.weight,
+        lipstick.model,
+        lipstick.produce
+
+        from
+        lipstick
+        where name in
+        <foreach collection="names" item="name" separator="," open="(" close=")">
+            #{name}
+        </foreach>
+        and produce>#{produce}
+        limit #{start},#{pageSize}
+
+    </select>
+
+
+    <select id="getLipstickUpDownCount" resultType="java.lang.Integer">
+        seLect
+        count(lipstick.price)
+        from
+        lipstick
+
+        where
+        lipstick.price BETWEEN #{startPrice} and #{endPrice}
+
+    </select>
+</mapper>

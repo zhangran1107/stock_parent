@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.stock.mapper.ShoppCartZiMapper">
+
+
+    <insert id="insert" >
+   insert into  shopping_cart_zi (shopping_cart_id,commodity_id,number)
+   value(#{shoppingCartId},#{commodityId},#{number})
+    </insert>
+
+
+    <select id="getObject" resultType="com.itheima.stock.pojo.domain.ShoppCartZiDomain">
+        select  * from
+        shopping_cart_zi
+        where
+        shopping_cart_id=#{shoppingCartId}
+        and
+        commodity_id=#{commodityId}
+
+    </select>
+
+
+
+    <update id="updateNumber" parameterType="com.itheima.stock.pojo.domain.ShoppCartZiDomain">
+       UPDATE shopping_cart_zi SET number = #{number}
+	   WHERE id = #{id}
+    </update>
+
+
+    <update id="updateNumber2" parameterType="com.itheima.stock.pojo.domain.ShoppCartZiDomain">
+       UPDATE shopping_cart_zi SET number = #{number}
+	   WHERE id = #{id}
+    </update>
+
+
+    <delete id="deleteData">
+       DELETE FROM shopping_cart_zi
+	   WHERE id = #{id}
+    </delete>
+
+
+
+    <delete id="deleteid">
+       DELETE FROM shopping_cart_zi
+	   WHERE id in
+        <foreach collection="ids" item="ids" separator="," open="(" close=")">
+            #{ids}
+        </foreach>
+
+    </delete>
+
+
+
+
+
+
+    <select id="getnumber" resultType="com.itheima.stock.pojo.domain.ShoppCartZiDomain">
+        select commodity_id , number from
+        shopping_cart_zi
+        where commodity_id in
+        <foreach collection="commodityIds" item="commodityIds" separator="," open="(" close=")">
+            #{commodityIds}
+        </foreach>
+        and shopping_cart_id=#{shoppingCartId}
+
+    </select>
+
+
+
+    <select id="getshoppingCartId" resultType="java.lang.Integer">
+        select shopping_cart_zi.id from
+        shopping_cart_zi
+        where commodity_id in
+        <foreach collection="commodityIds" item="commodityIds" separator="," open="(" close=")">
+            #{commodityIds}
+        </foreach>
+        and shopping_cart_id=#{shoppingCartId}
+
+    </select>
+
+
+</mapper>
+
+
