@@ -13,6 +13,13 @@
 
 
 
+    <select id="getOrderPage" resultType="com.itheima.stock.pojo.domain.OrderZhuDomain">
+        seLect *
+        from
+        order_zhu
+        limit #{start},#{pageSize}
+
+    </select>
 
 
 

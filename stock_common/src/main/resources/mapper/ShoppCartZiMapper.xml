@@ -81,6 +81,29 @@
     </select>
 
 
+
+    <select id="getnumberdan" resultType="java.lang.Integer">
+        select number from
+        shopping_cart_zi
+         where commodity_id =#{commodityId}
+		and id=#{shoppingCartId}
+
+    </select>
+
+
+
+
+    <select id="getShoppCartZiid" resultType="java.lang.Integer">
+        seLect id
+        from
+        shopping_cart_zi
+        where commodity_id =#{commodityId}
+		and shopping_cart_id=#{shoppingCartId}
+
+    </select>
+
+
+
 </mapper>
 
 

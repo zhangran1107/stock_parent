@@ -1,12 +1,12 @@
 package com.itheima.stock.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.itheima.stock.mapper.*;
-import com.itheima.stock.pojo.domain.CommodityDomain;
-import com.itheima.stock.pojo.domain.OrderZhuDomain;
-import com.itheima.stock.pojo.domain.OrderZiDomain;
-import com.itheima.stock.pojo.domain.ShoppCartZiDomain;
+import com.itheima.stock.pojo.domain.*;
 import com.itheima.stock.pojo.vo.OrderZiParam;
 import com.itheima.stock.service.OrderSercive;
+import com.itheima.stock.vo.req.OrderReq;
+import com.itheima.stock.vo.resp.PageResult;
 import com.itheima.stock.vo.resp.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +41,16 @@ public class OrderImpl implements OrderSercive {
 
 
 
-
+    //同时给订单主表，以及订单子表加数据
     @Override
     public R<OrderZhuDomain> insertOrderZhu (OrderZiParam orderZiParam){
+
+
         OrderZhuDomain  orderZhuDomain1 =new OrderZhuDomain();
         //购物车子表里查出number 跟  Commodity
         //获取 shoppingCartId ID 从购物车主表
         Integer dd=shoppingCartMapper.getUserId(orderZiParam.getUserId());
-        //查出的是 commodityId 跟number
+        //查出的是 commodityId 商品id  跟number 从购物车子表中
         List<ShoppCartZiDomain> ee =shoppCartZiMapper.getnumber(orderZiParam.getCommodityId(),dd);
 
         //是商品表中的 map key 是commodityId  number
@@ -63,14 +65,14 @@ public class OrderImpl implements OrderSercive {
         Integer ff=0;
         for(CommodityDomain commodityDomain:number){
 
-            //只需要把number跟价格 相乘
+            //只需要把number(在购物车子表中获取数量)跟价格 相乘
           ff+= map1.get(commodityDomain.getId())*commodityDomain.getPrice();
 
             //获取UserId 从传进来的参数中
             Integer userid=orderZiParam.getUserId();
             //获取当前时间
             Date currentDate = new Date();
-
+            //一步步塞进对象里  最后把值 塞进订单主播中
             orderZhuDomain1.setUserId(userid);
             orderZhuDomain1.setTotalPrice(ff);
             orderZhuDomain1.setConstruct(currentDate);
@@ -133,15 +135,35 @@ public class OrderImpl implements OrderSercive {
         }
 
 
-        //下完单后购物车里的数据里没有了
-
-//        shoppCartZiMapper. getshoppingCartId(shoppCartZiDomain.getCommodityId(),dd);
-
-        //shoppCartZiMapper.deleteid()
-
-
-
         return R. ok(orderZhuDomain1);
+
+
+
+    }
+
+
+    @Override
+    public R<PageResult<OrderZhuDomain>> getOrderPage (OrderReq req){
+
+        if(req.getPage()==null){
+            req.setPage(1);
+        }
+        if(req.getPageSize()==null){
+            req.setPageSize(2);
+        }
+
+        int  start=( (req.getPage() -1)*req.getPageSize());
+        List<OrderZhuDomain> pageData=orderMapper.getOrderPage(start, req.getPageSize());
+
+        //判断数据是否为空
+
+        PageInfo<OrderZhuDomain> pageInfo = new PageInfo<>(pageData);
+        PageResult<OrderZhuDomain> pageResult = new PageResult<>(pageInfo);
+        //4.响应数据
+        return R.ok(pageResult);
+
+
+
 
     }
 

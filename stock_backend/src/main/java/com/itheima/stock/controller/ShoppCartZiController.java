@@ -2,6 +2,7 @@ package com.itheima.stock.controller;
 
 import com.itheima.stock.pojo.domain.CommodityDomain;
 import com.itheima.stock.pojo.domain.ShoppCartZiDomain;
+import com.itheima.stock.pojo.vo.ShoppCartZiParam;
 import com.itheima.stock.service.CommoditySercive;
 import com.itheima.stock.service.ShoppCartZiSercive;
 import com.itheima.stock.vo.req.CommodityReq;
@@ -21,6 +22,12 @@ public class ShoppCartZiController {
     @PostMapping("/ShoppCartZi/insert")
     public R<ShoppCartZiDomain> insertShoppCartZi(@RequestBody ShoppCartZiDomain shoppCart){
         return  shoppCartZiSercive.insertShoppCartZi(shoppCart);
+
+    }
+
+    @PostMapping("/ShoppCartZi/update")
+    public R<ShoppCartZiDomain> updateShoppCartZi(@RequestBody ShoppCartZiParam shoppCartZiParam){
+        return  shoppCartZiSercive.updateShoppCartZi(shoppCartZiParam);
 
     }
 
